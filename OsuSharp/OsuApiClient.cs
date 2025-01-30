@@ -15,6 +15,11 @@ namespace OsuSharp;
 /// </summary>
 public partial class OsuApiClient
 {
+  private static readonly HttpClientHandler HttpClientHandler = new HttpClientHandler
+  {
+      AutomaticDecompression = DecompressionMethods.All
+  };
+
   /// <summary>
   /// The JSON serializer settings used by the API client.
   /// </summary>
@@ -38,7 +43,7 @@ public partial class OsuApiClient
   /// <summary>
   /// The HTTP client used to make requests to the osu! API v2.
   /// </summary>
-  private readonly HttpClient _http = new()
+  private readonly HttpClient _http = new(HttpClientHandler)
   {
     BaseAddress = new Uri("https://osu.ppy.sh/api/v2/")
   };
@@ -99,7 +104,7 @@ public partial class OsuApiClient
   /// Sends a GET request to the specified URL and parses the JSON in the response into the specified type.<br/>
   /// If the requested resource could not be found, null is returned. If the request fails otherwise, an <see cref="OsuApiException"/> is thrown.<br/>
   /// </summary>
-  /// <typeparam name="T">The type to parse the JSON in the response into.</typeparam>
+  /// <typeparam name="T">The type to parse the JSON in the response into.</typeparam> 
   /// <param name="url">The request URL.</param>
   /// <param name="parameters">Optional. The query parameters of the URL. All parameters with a null value are ignored.</param>
   /// <param name="jsonSelector">Optional. A selector for the base JSON, allowing to parse a sub-property of the JSON object.</param>
