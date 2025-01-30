@@ -26,6 +26,7 @@ internal class GradeConverter : JsonConverter
         "B" => Grade.B,
         "C" => Grade.C,
         "D" => Grade.D,
+        "F" => Grade.F,
         _ => throw new JsonSerializationException($"Unable to convert '{reader.Value}' into a grade."),
       };
 
