@@ -66,14 +66,26 @@ public partial class OsuApiClient
   /// <param name="ruleset">Optional. The ruleset in which the score was set.</param>
   /// <param name="mods">Optional. The mods applied to the score.</param>
   /// <returns>The beatmap user score or null, if the beatmap, user or score was not found.</returns>
-  public async Task<UserBeatmapScore?> GetUserBeatmapScoreAsync(int beatmapId, int userId, Ruleset? ruleset = null, string? mods = null)
+  public async Task<UserBeatmapScore?> GetUserBeatmapScoreAsync(int beatmapId, int userId, Ruleset? ruleset = null, HashSet<string>? mods = null)
   {
-    // Send the request and return the score object.
-    return await GetFromJsonAsync<UserBeatmapScore>($"beatmaps/{beatmapId}/scores/users/{userId}", new Dictionary<string, object?>()
-    {
-      { "mode", ruleset },
-      { "mods", mods }
-    });
+      // Send the request and return the score object.
+      var parameters = new Dictionary<string, object?>()
+      {
+          { "mode", ruleset },
+      };
+      if (mods != null)
+      {
+          foreach (var mod in mods)
+          {
+              parameters.Add("mods[]", mod);
+          }
+      }
+      else
+      {
+          parameters.Add("mods", null);
+      }
+
+      return await GetFromJsonAsync<UserBeatmapScore>($"beatmaps/{beatmapId}/scores/users/{userId}", parameters);
   }
 
   /// <summary>

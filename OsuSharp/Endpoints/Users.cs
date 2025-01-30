@@ -50,8 +50,8 @@ public partial class OsuApiClient
     string typeStr = typeof(UserScoreType).GetField(type.ToString())!.GetCustomAttribute<DescriptionAttribute>()!.Description;
     return await GetFromJsonAsync<Score[]>($"users/{userId}/scores/{typeStr}/", new Dictionary<string, object?>
     {
-      { "legacy_only", legacyOnly },
-      { "include_fails", includeFails },
+      { "legacy_only", legacyOnly?1:0 },
+      { "include_fails", includeFails?1:0 },
       { "mode", ruleset },
       { "limit", limit },
       { "offset", offset }
